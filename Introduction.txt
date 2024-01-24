@@ -1,0 +1,27 @@
+# API:
+-> APIs: services that the server can expose for the client to tap into
+-> menu of things that the server can respond to when a client makes a request
+
+# RESTful API:
+-> REpresentational
+   State
+   Transfer
+-> a type of architectural style
+
+# Rules for API to be restful
+1. Use HTTP Request Verbs
+2. Use specific pattern of routes/endpoint URLs
+
+# HTTP Request Verbs:
+1. GET
+2. POST
+3. PUT
+4. PATCH
+5. DELETE
+
+# HTTP PUT vs PATCH:
+-> PUT: updating the database by sending entire entry to replace the previous one
+-> PATCH: updating the only entry that needs to be changed keeping all other data entries unchanged
+
+
+
