@@ -47,6 +47,26 @@ def home():
     return render_template("index.html")
 
 
+@app.route("/add", methods=["POST"])
+def add_cafe():
+    new_cafe = Cafe(
+        name=request.form.get("name"),
+        map_url=request.form.get("map_url"),
+        img_url=request.form.get("img_url"),
+        location=request.form.get("loc"),
+        has_sockets=bool(request.form.get("sockets")),
+        has_toilet=bool(request.form.get("toilet")),
+        has_wifi=bool(request.form.get("wifi")),
+        can_take_calls=bool(request.form.get("calls")),
+        seats=request.form.get("seats"),
+        coffee_price=request.form.get("coffee_price"),
+    )
+    db.session.add(new_cafe)
+    db.session.commit()
+
+    return jsonify(response={"Success":"Successfully added the new cafe"})
+
+
 @app.route("/random")
 def get_random_cafe():
     cafes = db.session.query(Cafe).all()
@@ -75,6 +95,30 @@ def get_random_cafe():
     # Another method of serializing our database row Object into JSON is by first converting it to a dictionary and
     # then use jsonify() to convert dictionary to a JSON
     return jsonify(cafe=random_cafe.to_dict())
+
+
+@app.route("/all")
+def get_all_cafe():
+    cafes = db.session.query(Cafe).all()
+    # without list comprehension
+    # all_cafe = []
+    # for cafe in cafes:
+    #     all_cafe.append(cafe.to_dict())
+    # return jsonify(all_cafe)
+
+    # with list comprehension
+    return jsonify(cafes=[cafe.to_dict() for cafe in cafes])
+
+
+@app.route("/search")
+def search_cafe():
+    query_location = request.args.get('loc')
+    cafes = db.session.query(Cafe).filter_by(location=query_location).first()
+    # search in browser as http://localhost:5000/search?loc=Peckham
+    if cafes:
+        return jsonify(cafe=cafes.to_dict())
+    else:
+        return jsonify(error={"Not Found": "Sorry no cafe at that location"})
 
 
 ## HTTP GET - Read Record
